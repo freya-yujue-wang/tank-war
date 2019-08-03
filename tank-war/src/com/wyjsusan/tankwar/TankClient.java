@@ -3,8 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class TankClient extends Frame {
-	
+
 	int x = 50, y = 50;
+	
+	Image offScreenImage = null;
 	
 	@Override
 	public void paint(Graphics g) {
@@ -14,6 +16,21 @@ public class TankClient extends Frame {
 		g.setColor(c);
 		
 		y += 5;
+	}
+	
+	@Override
+	public void update(Graphics g) {
+		if (offScreenImage == null) {
+			offScreenImage = this.createImage(800, 600);
+		}
+		Graphics gOffScreen = offScreenImage.getGraphics();
+		Color c = gOffScreen.getColor();
+		gOffScreen.setColor(Color.GREEN);
+		gOffScreen.fillRect(0, 0, 800, 600);
+		gOffScreen.setColor(c);
+		paint(gOffScreen);
+		
+		g.drawImage(offScreenImage, 0, 0, null);
 	}
 
 	public void lauchFrame() {
