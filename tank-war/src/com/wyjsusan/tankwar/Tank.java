@@ -3,6 +3,7 @@ package com.wyjsusan.tankwar;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
 
 public class Tank {
 	public static final int XSPEED = 5;
@@ -270,6 +271,19 @@ public class Tank {
 		if (this.live && this.getRect().intersects(w.getRect())) {
 			this.stay();
 			return true;
+		}
+		return false;
+	}
+	
+	public boolean collidesWithTanks(List<Tank> tanks) {
+		for (Tank t: tanks) {
+			if (this != t) {
+				if(this.live && t.isLive() && this.getRect().intersects(t.getRect())) {
+					this.stay();
+					t.stay();
+					return true;
+				}
+			}
 		}
 		return false;
 	}
