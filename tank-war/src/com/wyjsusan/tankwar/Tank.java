@@ -247,6 +247,9 @@ public class Tank {
 		case KeyEvent.VK_DOWN:
 			bD = false;
 			break;
+		case KeyEvent.VK_A:
+			superFire();
+			break;
 		}
 		locationDirection();
 		
@@ -259,6 +262,17 @@ public class Tank {
 		int x = this.x + Tank.WIDTH / 2 - Missile.WIDTH/2;
 		int y = this.y + Tank.WIDTH / 2 - Missile.WIDTH/2;
 		Missile m = new Missile(x, y, good, ptDir, this.tc);
+		tc.missiles.add(m);
+		return m;
+	}
+	
+	public Missile fire(Direction dir) {
+		if (!live) {
+			return null;
+		}
+		int x = this.x + Tank.WIDTH / 2 - Missile.WIDTH/2;
+		int y = this.y + Tank.WIDTH / 2 - Missile.WIDTH/2;
+		Missile m = new Missile(x, y, good, dir, this.tc);
 		tc.missiles.add(m);
 		return m;
 	}
@@ -286,6 +300,14 @@ public class Tank {
 			}
 		}
 		return false;
+	}
+	
+	
+	private void superFire() {
+		Direction[] dirs = Direction.values();
+		for (int i = 0; i < 8; i++) {
+			fire(dirs[i]);
+		}
 	}
 	
 	private void stay() {
