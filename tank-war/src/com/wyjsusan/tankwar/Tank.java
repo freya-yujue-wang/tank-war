@@ -30,6 +30,7 @@ public class Tank {
 	}
 
 	private int x, y;
+	private int oldX, oldY;
 	
 	private static Random r = new Random();
 	
@@ -48,6 +49,8 @@ public class Tank {
 	public Tank(int x, int y, boolean good) {
 		this.x = x;
 		this.y = y;
+		this.oldX = x;
+		this.oldY = y;
 		this.good = good;
 	}
 	
@@ -130,6 +133,10 @@ public class Tank {
 	}
 	
 	void move() {
+		
+		this.oldX = x;
+		this.oldY = y;
+		
 		switch(dir) {
 		case L:
 			x -= XSPEED;
@@ -166,6 +173,7 @@ public class Tank {
 		if (this.dir != Direction.STOP) {
 			this.ptDir = this.dir;
 		}
+		
 		
 	}
 	
@@ -256,5 +264,18 @@ public class Tank {
 	
 	public Rectangle getRect() {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
+	}
+	
+	public boolean collidesWithWall(Wall w) {
+		if (this.live && this.getRect().intersects(w.getRect())) {
+			this.stay();
+			return true;
+		}
+		return false;
+	}
+	
+	private void stay() {
+		x = oldX;
+		y = oldY;
 	}
 }
