@@ -67,6 +67,18 @@ public class Tank {
 			break;
 		}
 		move();	
+		if (x < 0) {
+			x = 0;
+		}
+		if (y < 30) {
+			y = 30;
+		}
+		if (x + Tank.WIDTH > TankClient.GAME_WIDTH) {
+			x = TankClient.GAME_WIDTH - Tank.WIDTH;
+		}
+		if (y + Tank.HEIGHT > TankClient.GAME_HEIGHT) {
+			y = TankClient.GAME_HEIGHT - Tank.HEIGHT;
+		}
 	}
 	
 	void move() {
