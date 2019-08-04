@@ -2,6 +2,7 @@ package com.wyjsusan.tankwar;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class Tank {
 	public static final int XSPEED = 5;
@@ -24,7 +25,13 @@ public class Tank {
 	
 	private boolean good;
 	
+	public boolean isGood() {
+		return good;
+	}
+
 	private int x, y;
+	
+	private static Random r = new Random();
 	
 	private boolean bL = false;
 	private boolean bU = false;
@@ -35,6 +42,8 @@ public class Tank {
 	private Direction dir = Direction.STOP;
 	private Direction ptDir = Direction.D;
 	
+	private int step = r.nextInt(12) + 3;
+	
 	
 	public Tank(int x, int y, boolean good) {
 		this.x = x;
@@ -42,8 +51,9 @@ public class Tank {
 		this.good = good;
 	}
 	
-	public Tank(int x, int y, boolean good, TankClient tc) {
+	public Tank(int x, int y, boolean good, Direction dir, TankClient tc) {
 		this(x, y, good);
+		this.dir = dir;
 		this.tc = tc;
 	}
 	
@@ -102,6 +112,20 @@ public class Tank {
 		}
 		if (y + Tank.HEIGHT > TankClient.GAME_HEIGHT) {
 			y = TankClient.GAME_HEIGHT - Tank.HEIGHT;
+		}
+		
+		if (!good) {
+			Direction[] dirs = Direction.values();
+			if (step == 0) {
+				step = r.nextInt(12) + 3;
+				int rn = r.nextInt(dirs.length);
+				dir = dirs[rn];
+			}		
+			step--;
+			if (r.nextInt(40) > 38) {
+				this.fire();
+			}
+			
 		}
 	}
 	
@@ -220,9 +244,12 @@ public class Tank {
 	}
 	
 	public Missile fire() {
+		if (!live) {
+			return null;
+		}
 		int x = this.x + Tank.WIDTH / 2 - Missile.WIDTH/2;
 		int y = this.y + Tank.WIDTH / 2 - Missile.WIDTH/2;
-		Missile m = new Missile(x, y, ptDir, this.tc);
+		Missile m = new Missile(x, y, good, ptDir, this.tc);
 		tc.missiles.add(m);
 		return m;
 	}
