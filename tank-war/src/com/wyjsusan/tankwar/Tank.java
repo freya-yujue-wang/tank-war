@@ -20,7 +20,7 @@ public class Tank {
 		this.live = live;
 	}
 
-	TankClient tc;
+	private TankClient tc;
 	
 	private boolean good;
 	
@@ -49,6 +49,9 @@ public class Tank {
 	
 	public void draw(Graphics g) {
 		if (!live) {
+			if (!good) {
+				tc.tanks.remove(this);
+			}
 			return;
 		}
 		Color c = g.getColor();

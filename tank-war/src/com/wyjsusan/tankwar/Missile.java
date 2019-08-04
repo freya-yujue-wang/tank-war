@@ -1,6 +1,7 @@
 package com.wyjsusan.tankwar;
 
 import java.awt.*;
+import java.util.List;
 
 public class Missile {
 	public static final int XSPEED = 10;
@@ -96,6 +97,15 @@ public class Missile {
 			Explode e = new Explode(x, y, tc);
 			tc.explodes.add(e);
 			return true;
+		}
+		return false;
+	}
+	
+	public boolean hitTanks(List<Tank> tanks) {
+		for (int i = 0; i < tanks.size(); i++) {
+			if (hitTank(tanks.get(i))) {
+				return true;
+			}
 		}
 		return false;
 	}
