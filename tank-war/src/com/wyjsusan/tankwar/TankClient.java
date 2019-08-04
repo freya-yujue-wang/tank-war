@@ -1,6 +1,9 @@
 package com.wyjsusan.tankwar;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class TankClient extends Frame {
 	
@@ -8,13 +11,15 @@ public class TankClient extends Frame {
 	public static final int GAME_HEIGHT = 600;
 
 	Tank myTank = new Tank(50, 50, this);
-	Missile m = null;
+	List<Missile> missiles = new ArrayList<>();
 	
 	Image offScreenImage = null;
 	
 	@Override
 	public void paint(Graphics g) {
-		if (m!= null) {
+		g.drawString("missiles count:" + missiles.size(), 10, 50);
+		for (int i = 0; i < missiles.size(); i++) {
+			Missile m = missiles.get(i);
 			m.draw(g);
 		}		
 		myTank.draw(g);
