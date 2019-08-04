@@ -18,6 +18,7 @@ public class TankClient extends Frame {
 	List<Missile> missiles = new ArrayList<>();
 	List<Explode> explodes = new ArrayList<>();
 	List<Tank> tanks = new ArrayList<>();
+	Blood b = new Blood();
 	
 	Image offScreenImage = null;
 	
@@ -47,8 +48,10 @@ public class TankClient extends Frame {
 			t.draw(g);
 		}
 		myTank.draw(g);
+		myTank.eat(b);
 		w1.draw(g);
 		w2.draw(g);
+		b.draw(g);
 	}
 	
 	@Override

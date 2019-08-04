@@ -339,4 +339,13 @@ public class Tank {
 			
 		}
 	}
+	
+	public boolean eat(Blood b) {
+		if (this.live && b.isLive() && this.getRect().intersects(b.getRect())) {
+			this.life = 100;
+			b.setLive(false);
+			return true;
+		}
+		return false;
+	}
 }
