@@ -1,33 +1,38 @@
 package com.wyjsusan.tankwar;
+/**
+ * this class is the main window of the game.
+ * @author:wyjsusan
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class TankClient extends Frame {
-	
+
 	public static final int GAME_WIDTH = 800;
 	public static final int GAME_HEIGHT = 600;
 
 	Tank myTank = new Tank(50, 50, true, Tank.Direction.STOP, this);
-	
+
 	Wall w1 = new Wall(100, 200, 20, 150, this);
 	Wall w2 = new Wall(300, 100, 300, 20, this);
-	
+
 	List<Missile> missiles = new ArrayList<>();
 	List<Explode> explodes = new ArrayList<>();
 	List<Tank> tanks = new ArrayList<>();
 	Blood b = new Blood();
-	
+
 	Image offScreenImage = null;
-	
+
 	@Override
 	public void paint(Graphics g) {
 		g.drawString("missiles count:" + missiles.size(), 10, 50);
 		g.drawString("explodes count:" + explodes.size(), 10, 70);
 		g.drawString("enemytanks count:" + tanks.size(), 10, 90);
 		g.drawString("tanks life:" + myTank.getLife(), 10, 110);
+		// if enemy was all killed, create new enmey.
 		if (tanks.size() <= 0) {
 			for (int i = 0; i < 5; i++) {
 				tanks.add(new Tank(50 + 40 * (i + 1), 50, false, Tank.Direction.D, this));
@@ -58,7 +63,7 @@ public class TankClient extends Frame {
 		w2.draw(g);
 		b.draw(g);
 	}
-	
+
 	@Override
 	public void update(Graphics g) {
 		if (offScreenImage == null) {
@@ -66,11 +71,11 @@ public class TankClient extends Frame {
 		}
 		Graphics gOffScreen = offScreenImage.getGraphics();
 		Color c = gOffScreen.getColor();
-		gOffScreen.setColor(Color.GREEN);
+		gOffScreen.setColor(Color.GRAY);
 		gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		gOffScreen.setColor(c);
 		paint(gOffScreen);
-		
+
 		g.drawImage(offScreenImage, 0, 0, null);
 	}
 
@@ -87,14 +92,14 @@ public class TankClient extends Frame {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
-			
+
 		});
 		this.setResizable(false);
-		this.setBackground(Color.GREEN);
-		
+		this.setBackground(Color.GRAY);
+
 		this.addKeyListener(new KeyMonitor());
 		setVisible(true);
-		
+
 		new Thread(new PaintThread()).start();
 	}
 
@@ -103,7 +108,7 @@ public class TankClient extends Frame {
 		tc.lauchFrame();
 
 	}
-	
+
 	private class PaintThread implements Runnable {
 
 		@Override
@@ -116,20 +121,20 @@ public class TankClient extends Frame {
 					e.printStackTrace();
 				}
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	private class KeyMonitor extends KeyAdapter {
 		@Override
 		public void keyReleased(KeyEvent e) {
 			myTank.keyReleased(e);
 		}
 
-		public void keyPressed(KeyEvent e) {			
+		public void keyPressed(KeyEvent e) {
 			myTank.keyPressed(e);
 		}
-		
+
 	}
 }

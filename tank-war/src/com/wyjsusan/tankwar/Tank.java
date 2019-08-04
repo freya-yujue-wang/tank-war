@@ -8,14 +8,14 @@ import java.util.List;
 public class Tank {
 	public static final int XSPEED = 5;
 	public static final int YSPEED = 5;
-	
+
 	public static final int WIDTH = 30;
 	public static final int HEIGHT = 30;
-	
+
 	private boolean live = true;
 	private BloodBar bb = new BloodBar();
 	private int life = 100;
-	
+
 	public int getLife() {
 		return life;
 	}
@@ -33,30 +33,32 @@ public class Tank {
 	}
 
 	private TankClient tc;
-	
+
 	private boolean good;
-	
+
 	public boolean isGood() {
 		return good;
 	}
 
 	private int x, y;
 	private int oldX, oldY;
-	
+
 	private static Random r = new Random();
-	
+
 	private boolean bL = false;
 	private boolean bU = false;
 	private boolean bR = false;
 	private boolean bD = false;
-	
-	enum Direction {L, LU, U, RU, R, RD, D, LD, STOP};
+
+	enum Direction {
+		L, LU, U, RU, R, RD, D, LD, STOP
+	};
+
 	private Direction dir = Direction.STOP;
 	private Direction ptDir = Direction.D;
-	
+
 	private int step = r.nextInt(12) + 3;
-	
-	
+
 	public Tank(int x, int y, boolean good) {
 		this.x = x;
 		this.y = y;
@@ -64,13 +66,13 @@ public class Tank {
 		this.oldY = y;
 		this.good = good;
 	}
-	
+
 	public Tank(int x, int y, boolean good, Direction dir, TankClient tc) {
 		this(x, y, good);
 		this.dir = dir;
 		this.tc = tc;
 	}
-	
+
 	public void draw(Graphics g) {
 		if (!live) {
 			if (!good) {
@@ -84,14 +86,14 @@ public class Tank {
 		} else {
 			g.setColor(Color.BLUE);
 		}
-		
+
 		g.fillOval(x, y, WIDTH, HEIGHT);
 		g.setColor(c);
-		if(good) {
+		if (good) {
 			bb.draw(g);
 		}
-		
-		switch(ptDir) {
+
+		switch (ptDir) {
 		case L:
 			g.drawLine(x + Tank.WIDTH / 2, y + Tank.HEIGHT / 2, x, y + Tank.HEIGHT / 2);
 			break;
@@ -117,7 +119,7 @@ public class Tank {
 			g.drawLine(x + Tank.WIDTH / 2, y + Tank.HEIGHT / 2, x, y + Tank.HEIGHT);
 			break;
 		}
-		move();	
+		move();
 		if (x < 0) {
 			x = 0;
 		}
@@ -130,28 +132,28 @@ public class Tank {
 		if (y + Tank.HEIGHT > TankClient.GAME_HEIGHT) {
 			y = TankClient.GAME_HEIGHT - Tank.HEIGHT;
 		}
-		
+
 		if (!good) {
 			Direction[] dirs = Direction.values();
 			if (step == 0) {
 				step = r.nextInt(12) + 3;
 				int rn = r.nextInt(dirs.length);
 				dir = dirs[rn];
-			}		
+			}
 			step--;
 			if (r.nextInt(40) > 38) {
 				this.fire();
 			}
-			
+
 		}
 	}
-	
+
 	void move() {
-		
+
 		this.oldX = x;
 		this.oldY = y;
-		
-		switch(dir) {
+
+		switch (dir) {
 		case L:
 			x -= XSPEED;
 			break;
@@ -183,17 +185,16 @@ public class Tank {
 		case STOP:
 			break;
 		}
-		
+
 		if (this.dir != Direction.STOP) {
 			this.ptDir = this.dir;
 		}
-		
-		
+
 	}
-	
+
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		switch(key) {	
+		switch (key) {
 		case KeyEvent.VK_F2:
 			if (!this.live) {
 				this.live = true;
@@ -214,43 +215,33 @@ public class Tank {
 		}
 		locationDirection();
 	}
-	
+
 	void locationDirection() {
-		if(bL && !bU && !bR && !bD) {
+		if (bL && !bU && !bR && !bD) {
 			dir = Direction.L;
-		}
-		else if(bL && bU && !bR && !bD) {
+		} else if (bL && bU && !bR && !bD) {
 			dir = Direction.LU;
-		}
-		else if(!bL && bU && !bR && !bD) {
+		} else if (!bL && bU && !bR && !bD) {
 			dir = Direction.U;
-		}
-		else if(!bL && bU && bR && !bD) {
+		} else if (!bL && bU && bR && !bD) {
 			dir = Direction.RU;
-		}
-		else if(!bL && !bU && bR && !bD) {
+		} else if (!bL && !bU && bR && !bD) {
 			dir = Direction.R;
-		}
-		else if(!bL && !bU && bR && bD) {
+		} else if (!bL && !bU && bR && bD) {
 			dir = Direction.RD;
-		}
-		else if(!bL && !bU && !bR && bD) {
+		} else if (!bL && !bU && !bR && bD) {
 			dir = Direction.D;
-		}
-		else if(bL && !bU && !bR && bD) {
+		} else if (bL && !bU && !bR && bD) {
 			dir = Direction.LD;
-		}
-		else if(!bL && !bU && !bR && !bD) {
+		} else if (!bL && !bU && !bR && !bD) {
 			dir = Direction.STOP;
 		}
 	}
 
-
-
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-		switch(key) {
-		case KeyEvent.VK_ALT:
+		switch (key) {
+		case KeyEvent.VK_J:
 			fire();
 			break;
 		case KeyEvent.VK_LEFT:
@@ -270,35 +261,35 @@ public class Tank {
 			break;
 		}
 		locationDirection();
-		
+
 	}
-	
+
 	public Missile fire() {
 		if (!live) {
 			return null;
 		}
-		int x = this.x + Tank.WIDTH / 2 - Missile.WIDTH/2;
-		int y = this.y + Tank.WIDTH / 2 - Missile.WIDTH/2;
+		int x = this.x + Tank.WIDTH / 2 - Missile.WIDTH / 2;
+		int y = this.y + Tank.WIDTH / 2 - Missile.WIDTH / 2;
 		Missile m = new Missile(x, y, good, ptDir, this.tc);
 		tc.missiles.add(m);
 		return m;
 	}
-	
+
 	public Missile fire(Direction dir) {
 		if (!live) {
 			return null;
 		}
-		int x = this.x + Tank.WIDTH / 2 - Missile.WIDTH/2;
-		int y = this.y + Tank.WIDTH / 2 - Missile.WIDTH/2;
+		int x = this.x + Tank.WIDTH / 2 - Missile.WIDTH / 2;
+		int y = this.y + Tank.WIDTH / 2 - Missile.WIDTH / 2;
 		Missile m = new Missile(x, y, good, dir, this.tc);
 		tc.missiles.add(m);
 		return m;
 	}
-	
+
 	public Rectangle getRect() {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
-	
+
 	public boolean collidesWithWall(Wall w) {
 		if (this.live && this.getRect().intersects(w.getRect())) {
 			this.stay();
@@ -306,11 +297,11 @@ public class Tank {
 		}
 		return false;
 	}
-	
+
 	public boolean collidesWithTanks(List<Tank> tanks) {
-		for (Tank t: tanks) {
+		for (Tank t : tanks) {
 			if (this != t) {
-				if(this.live && t.isLive() && this.getRect().intersects(t.getRect())) {
+				if (this.live && t.isLive() && this.getRect().intersects(t.getRect())) {
 					this.stay();
 					t.stay();
 					return true;
@@ -319,20 +310,19 @@ public class Tank {
 		}
 		return false;
 	}
-	
-	
+
 	private void superFire() {
 		Direction[] dirs = Direction.values();
 		for (int i = 0; i < 8; i++) {
 			fire(dirs[i]);
 		}
 	}
-	
+
 	private void stay() {
 		x = oldX;
 		y = oldY;
 	}
-	
+
 	private class BloodBar {
 		public void draw(Graphics g) {
 			Color c = g.getColor();
@@ -341,10 +331,10 @@ public class Tank {
 			int w = WIDTH * life / 100;
 			g.fillRect(x, y - 10, w, 10);
 			g.setColor(c);
-			
+
 		}
 	}
-	
+
 	public boolean eat(Blood b) {
 		if (this.live && b.isLive() && this.getRect().intersects(b.getRect())) {
 			this.life = 100;

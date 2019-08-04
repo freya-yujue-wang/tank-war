@@ -7,7 +7,7 @@ public class Blood {
 	TankClient tc;
 	int step = 0;
 	private boolean live = true;
-	
+
 	public void setLive(boolean live) {
 		this.live = live;
 	}
@@ -16,17 +16,17 @@ public class Blood {
 		return live;
 	}
 
-	private int[][] pos = {
-						  {350, 300}, {360, 300}, {375, 275}, {400, 200}, {360, 270}, {365, 290}, {340, 280}		
-						};
-	
+	// blood move trace.start from the first point.
+	private int[][] pos = { { 350, 300 }, { 360, 300 }, { 375, 275 }, { 400, 200 }, { 360, 270 }, { 365, 290 },
+			{ 340, 280 } };
+
 	public Blood() {
 		x = pos[0][0];
 		y = pos[0][1];
 		w = h = 15;
-		
+
 	}
-	
+
 	public void draw(Graphics g) {
 		if (!live) {
 			return;
@@ -37,7 +37,7 @@ public class Blood {
 		g.setColor(c);
 		move();
 	}
-	
+
 	private void move() {
 		step++;
 		if (step == pos.length) {
@@ -46,7 +46,7 @@ public class Blood {
 		x = pos[step][0];
 		y = pos[step][1];
 	}
-	
+
 	public Rectangle getRect() {
 		return new Rectangle(x, y, w, h);
 	}
