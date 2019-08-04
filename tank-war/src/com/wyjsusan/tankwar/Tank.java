@@ -10,6 +10,16 @@ public class Tank {
 	public static final int WIDTH = 30;
 	public static final int HEIGHT = 30;
 	
+	private boolean live = true;
+	
+	public boolean isLive() {
+		return live;
+	}
+
+	public void setLive(boolean live) {
+		this.live = live;
+	}
+
 	TankClient tc;
 	
 	private boolean good;
@@ -38,6 +48,9 @@ public class Tank {
 	}
 	
 	public void draw(Graphics g) {
+		if (!live) {
+			return;
+		}
 		Color c = g.getColor();
 		if (good) {
 			g.setColor(Color.RED);
@@ -209,5 +222,9 @@ public class Tank {
 		Missile m = new Missile(x, y, ptDir, this.tc);
 		tc.missiles.add(m);
 		return m;
+	}
+	
+	public Rectangle getRect() {
+		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
 }
