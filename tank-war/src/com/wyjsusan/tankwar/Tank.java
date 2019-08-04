@@ -13,7 +13,16 @@ public class Tank {
 	public static final int HEIGHT = 30;
 	
 	private boolean live = true;
+	private int life = 100;
 	
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
+
 	public boolean isLive() {
 		return live;
 	}
