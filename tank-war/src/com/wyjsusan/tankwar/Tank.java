@@ -82,7 +82,7 @@ public class Tank {
 		}
 		Color c = g.getColor();
 		if (good) {
-			g.setColor(Color.RED);
+			g.setColor(Color.GREEN);
 		} else {
 			g.setColor(Color.BLUE);
 		}
@@ -93,7 +93,7 @@ public class Tank {
 			bb.draw(g);
 		}
 
-		switch (ptDir) {
+		switch (ptDir) { //add a gun barrel to the tank.
 		case L:
 			g.drawLine(x + Tank.WIDTH / 2, y + Tank.HEIGHT / 2, x, y + Tank.HEIGHT / 2);
 			break;
@@ -195,7 +195,7 @@ public class Tank {
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		switch (key) {
-		case KeyEvent.VK_F2:
+		case KeyEvent.VK_F3:
 			if (!this.live) {
 				this.live = true;
 				this.life = 100;
@@ -256,14 +256,15 @@ public class Tank {
 		case KeyEvent.VK_DOWN:
 			bD = false;
 			break;
-		case KeyEvent.VK_A:
+		case KeyEvent.VK_H:
 			superFire();
 			break;
 		}
 		locationDirection();
 
 	}
-
+	
+	//missile fire.
 	public Missile fire() {
 		if (!live) {
 			return null;
@@ -274,7 +275,8 @@ public class Tank {
 		tc.missiles.add(m);
 		return m;
 	}
-
+	
+	//gun barrel fire.
 	public Missile fire(Direction dir) {
 		if (!live) {
 			return null;
@@ -310,7 +312,8 @@ public class Tank {
 		}
 		return false;
 	}
-
+	
+	//fire 8 directions missiles
 	private void superFire() {
 		Direction[] dirs = Direction.values();
 		for (int i = 0; i < 8; i++) {
@@ -318,11 +321,13 @@ public class Tank {
 		}
 	}
 
+	//stay to last step.
 	private void stay() {
 		x = oldX;
 		y = oldY;
 	}
 
+	//crate inner class: bloodbar to my tank. one hit: lose 20 of life.
 	private class BloodBar {
 		public void draw(Graphics g) {
 			Color c = g.getColor();
@@ -335,6 +340,7 @@ public class Tank {
 		}
 	}
 
+	//my tank can eat a blood, and life could retrieve to 100.
 	public boolean eat(Blood b) {
 		if (this.live && b.isLive() && this.getRect().intersects(b.getRect())) {
 			this.life = 100;

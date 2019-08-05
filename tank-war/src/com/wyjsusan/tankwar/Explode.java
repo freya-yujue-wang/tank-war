@@ -6,7 +6,8 @@ public class Explode {
 
 	int x, y;
 	private boolean live = true;
-
+	
+	//the diameter of the explode(small to large to small);
 	int[] diameter = { 4, 7, 12, 18, 26, 32, 49, 30, 14, 6 };
 	int step = 0;
 

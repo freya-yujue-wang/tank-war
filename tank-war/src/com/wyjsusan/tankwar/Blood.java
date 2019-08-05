@@ -16,7 +16,7 @@ public class Blood {
 		return live;
 	}
 
-	// blood move trace.start from the first point.
+	// blood move trace. start from the first point.
 	private int[][] pos = { { 350, 300 }, { 360, 300 }, { 375, 275 }, { 400, 200 }, { 360, 270 }, { 365, 290 },
 			{ 340, 280 } };
 
@@ -38,6 +38,7 @@ public class Blood {
 		move();
 	}
 
+	//move as the pos trace.
 	private void move() {
 		step++;
 		if (step == pos.length) {

@@ -11,17 +11,17 @@ import java.util.List;
 
 public class TankClient extends Frame {
 
-	public static final int GAME_WIDTH = 800;
-	public static final int GAME_HEIGHT = 600;
+	public static final int GAME_WIDTH = 1200;
+	public static final int GAME_HEIGHT = 900;
 
-	Tank myTank = new Tank(50, 50, true, Tank.Direction.STOP, this);
+	// create my own tank.
+	Tank myTank = new Tank(600, 450, true, Tank.Direction.STOP, this);
 
-	Wall w1 = new Wall(100, 200, 20, 150, this);
-	Wall w2 = new Wall(300, 100, 300, 20, this);
-
+	// create a lot of missiles.
 	List<Missile> missiles = new ArrayList<>();
 	List<Explode> explodes = new ArrayList<>();
 	List<Tank> tanks = new ArrayList<>();
+	List<Wall> walls = new ArrayList<>();
 	Blood b = new Blood();
 
 	Image offScreenImage = null;
@@ -34,16 +34,15 @@ public class TankClient extends Frame {
 		g.drawString("tanks life:" + myTank.getLife(), 10, 110);
 		// if enemy was all killed, create new enmey.
 		if (tanks.size() <= 0) {
-			for (int i = 0; i < 5; i++) {
-				tanks.add(new Tank(50 + 40 * (i + 1), 50, false, Tank.Direction.D, this));
-			}
+			tanks = generateEnemies(40);
 		}
 		for (int i = 0; i < missiles.size(); i++) {
 			Missile m = missiles.get(i);
 			m.hitTanks(tanks);
 			m.hitTank(myTank);
-			m.hitWall(w1);
-			m.hitWall(w2);
+			for (Wall wall : walls) {
+				m.hitWall(wall);
+			}
 			m.draw(g);
 		}
 		for (int i = 0; i < explodes.size(); i++) {
@@ -52,15 +51,17 @@ public class TankClient extends Frame {
 		}
 		for (int i = 0; i < tanks.size(); i++) {
 			Tank t = tanks.get(i);
-			t.collidesWithWall(w1);
-			t.collidesWithWall(w2);
+			for (Wall wall : walls) {
+				t.collidesWithWall(wall);
+			}
 			t.collidesWithTanks(tanks);
 			t.draw(g);
 		}
 		myTank.draw(g);
 		myTank.eat(b);
-		w1.draw(g);
-		w2.draw(g);
+		for (Wall wall : walls) {
+			wall.draw(g);
+		}
 		b.draw(g);
 	}
 
@@ -79,11 +80,33 @@ public class TankClient extends Frame {
 		g.drawImage(offScreenImage, 0, 0, null);
 	}
 
-	public void lauchFrame() {
-		for (int i = 0; i < 10; i++) {
+	private List<Tank> generateEnemies(int number) {
+		List<Tank> tanks = new ArrayList<>();
+		for (int i = 0; i < number / 2; i++) {
 			tanks.add(new Tank(50 + 40 * (i + 1), 50, false, Tank.Direction.D, this));
 		}
-		this.setLocation(400, 300);
+
+		for (int i = 0; i < number / 2; i++) {
+			tanks.add(new Tank(800, 100 + 30 * (i + 1), false, Tank.Direction.U, this));
+		}
+		return tanks;
+	}
+
+	public void lauchFrame() {
+		// when the game start, add 20 enemy tanks to the board.
+
+		tanks = generateEnemies(20);
+
+		// create two walls to the game to increase the difficulty.
+		Wall w1 = new Wall(100, 200, 20, 450, this);
+		Wall w2 = new Wall(300, 100, 600, 20, this);
+		Wall w3 = new Wall(1000, 200, 20, 450, this);
+		Wall w4 = new Wall(200, 800, 600, 20, this);
+		walls.add(w1);
+		walls.add(w2);
+		walls.add(w3);
+		walls.add(w4);
+		this.setLocation(300, 100);
 		this.setSize(GAME_WIDTH, GAME_HEIGHT);
 		this.setTitle("TankWar");
 		this.addWindowListener(new WindowAdapter() {

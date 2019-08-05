@@ -18,6 +18,7 @@ public class Missile {
 
 	private TankClient tc;
 
+	//determine if the missile is live: if hit the wall or out the board or hit the tank- dead.
 	public boolean isLive() {
 		return live;
 	}
@@ -40,12 +41,13 @@ public class Missile {
 			return;
 		}
 		Color c = g.getColor();
-		g.setColor(good ? Color.white : Color.BLACK);
+		g.setColor(good ? Color.white : Color.BLACK); //good missile: white, bad missile: black
 		g.fillOval(x, y, WIDTH, HEIGHT);
 		g.setColor(c);
 		move();
 	}
 
+	//missile can move 8 directions
 	private void move() {
 
 		switch (dir) {
@@ -83,7 +85,6 @@ public class Missile {
 
 		if (x < 0 || y < 0 || x > TankClient.GAME_WIDTH || y > TankClient.GAME_HEIGHT) {
 			live = false;
-			// tc.missiles.remove(this);
 		}
 
 	}
